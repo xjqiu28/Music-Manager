@@ -17,6 +17,33 @@ namespace music_manager_starter.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("music_manager_starter.Data.Models.Playlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Creator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Playlists");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Creator = "Xin Jin",
+                            Name = "My fave songs"
+                        });
+                });
+
             modelBuilder.Entity("music_manager_starter.Data.Models.Song", b =>
                 {
                     b.Property<Guid>("Id")
@@ -50,7 +77,7 @@ namespace music_manager_starter.Data.Migrations
                             Album = "Spiritbox",
                             Artist = "Spiritbox",
                             Genre = "Metal",
-                            Title = "Circle With Me"
+                            Title = "Circle With You"
                         },
                         new
                         {

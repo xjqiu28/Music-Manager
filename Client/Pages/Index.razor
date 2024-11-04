@@ -5,12 +5,12 @@
 
 @code {
     private List<Song> songs;
-    // private List<Playlist> playlists;
+    private List<Playlist> playlists;
 
     protected override async Task OnInitializedAsync()
     {
         songs = await Http.GetFromJsonAsync<List<Song>>("api/songs");
-        // playlists = await Http.GetFromJsonAsync<List<Playlist>>("api/playlists");
+        playlists = await Http.GetFromJsonAsync<List<Playlist>>("api/playlists");
     }
 }
 
@@ -25,6 +25,27 @@
                     class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2">@song.Title</h3>
                     <p class="text-md">Artist: <span class="font-light">@song.Artist</span></p>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-1 text-center text-gray-400">No songs found.</div>
+        }
+    </div>
+</div>
+
+<div class="p-0 min-h-screen bg-pattern flex flex-col items-center justify-center">
+    <h2 class="text-3xl font-bold text-white mb-8 text-center">Playlist Library</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        @if (playlists != null && playlists.Count > 0)
+        {
+            @foreach (var playlist in playlists)
+            {
+                <div class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2">@playlist.Name</h3>
+                    <p class="text-md">Artist: <span class="font-light">@playlist.Creator</span></p>
 
                 </div>
             }
