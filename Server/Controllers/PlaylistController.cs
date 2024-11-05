@@ -25,7 +25,7 @@ namespace music_manager_starter.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Playlist>> PostSong(Playlist playlist)
+        public async Task<ActionResult<Playlist>> PostPlaylist(Playlist playlist)
         {
             if (playlist == null)
             {
@@ -37,6 +37,21 @@ namespace music_manager_starter.Server.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Playlist>> DeletePlaylist(int id)
+        {
+            var playlist = await _context.Playlists.FindAsync(id);
+            Console.WriteLine($"Playlist details: Id = {playlist.Id}, Name = {playlist.Name}, Creator = {playlist.Creator}");
+            if (playlist == null)
+            {
+                return BadRequest();
+            }
+            _context.Playlists.Remove(playlist);
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
     }
 }
