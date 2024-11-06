@@ -5,11 +5,27 @@
 
 @code {
     private List<Playlist> playlists;
+    private string message;
 
     protected override async Task OnInitializedAsync()
     {
-    
+
         playlists = await Http.GetFromJsonAsync<List<Playlist>>("api/playlists");
+    }
+
+     async Task RemovePlaylist(Playlist playlist)
+    {
+
+        var response = await Http.DeleteAsync($"api/playlists/{playlist.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Playlist removed successfully!";
+            playlists.Remove(playlist);
+        }
+        else
+        {
+            message = "Error adding playlist. Please try again.";
+        }
     }
 
 }
@@ -27,7 +43,7 @@
                     <p class="text-md">Artist: <span class="font-light">@playlist.Creator</span></p>
                     <div class="buttons">
                         <button class="button-styles">Edit</button>
-                        <button class="button-styles">Delete</button>
+                        <button @onclick="() => RemovePlaylist(playlist)" class="button-styles">Delete</button>
                     </div>
                 </div>
             }

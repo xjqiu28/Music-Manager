@@ -6,9 +6,16 @@
 @code {
     private List<Song> songs;
 
+    private bool isExpanded = false;
+
     protected override async Task OnInitializedAsync()
     {
         songs = await Http.GetFromJsonAsync<List<Song>>("api/songs");
+    }
+
+    async Task ShowMoreDetails(Song song)
+    {
+        song.isExpanded = !song.isExpanded;
     }
 }
 
@@ -19,11 +26,15 @@
         {
             @foreach (var song in songs)
             {
-                <div
+                <div @onclick=" () => ShowMoreDetails(song)"
                     class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2">@song.Title</h3>
                     <p class="text-md">Artist: <span class="font-light">@song.Artist</span></p>
 
+                    @if (song.isExpanded)
+                    {
+                            <p class="text-md mt-2">Additional song details go here...</p>
+                    }
                 </div>
             }
         }
