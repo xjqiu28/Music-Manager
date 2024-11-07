@@ -24,6 +24,13 @@ namespace music_manager_starter.Server.Controllers
             return await _context.Playlists.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Playlist>> GetPlaylistById(int id)
+        {
+            var playlist =  await _context.Playlists.FindAsync(id);
+            return playlist;
+        }
+
         [HttpPost]
         public async Task<ActionResult<Playlist>> PostPlaylist(Playlist playlist)
         {

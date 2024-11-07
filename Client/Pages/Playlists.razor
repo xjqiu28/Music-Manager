@@ -2,8 +2,10 @@
 @using music_manager_starter.Shared
 
 @inject HttpClient Http
-
+@inject NavigationManager Navigation
 @code {
+    // [Parameter]
+    // public Playlist Playlist { get; set; }
     private List<Playlist> playlists;
     private string message;
 
@@ -27,6 +29,12 @@
             message = "Error adding playlist. Please try again.";
         }
     }
+    private void EditPlaylist(int playlistId)
+    {
+        // Navigate to EditPlaylist page with the playlist ID as a route parameter
+        Navigation.NavigateTo($"/EditPlaylist/{playlistId}");
+    }
+
 
 }
 
@@ -42,7 +50,7 @@
                     <h3 class="text-xl font-semibold mb-2">@playlist.Name</h3>
                     <p class="text-md">Artist: <span class="font-light">@playlist.Creator</span></p>
                     <div class="buttons">
-                        <button class="button-styles">Edit</button>
+                        <button @onclick="() => EditPlaylist(playlist.Id)" class="button-styles">Edit</button>
                         <button @onclick="() => RemovePlaylist(playlist)" class="button-styles">Delete</button>
                     </div>
                 </div>
@@ -75,7 +83,7 @@
         padding: 0.5rem;
         border-radius: 30%;
         width: 45%;
-        text-alight: center;
+        text-align: center;
     }
 
     button:hover {
@@ -89,6 +97,8 @@
         border-radius: 10px;
         position: relative;
         overflow: hidden;
+        width: 2614.11px;
+        max-width: 264.11px;
     }
 
     .glass:before {
