@@ -2,16 +2,22 @@
 @using music_manager_starter.Shared
 
 @inject HttpClient Http
+@inject SearchService SearchService
 
 @code {
     private List<Song> songs;
+    private List<Song> filteredSongs;
 
     private bool isExpanded = false;
+
 
     protected override async Task OnInitializedAsync()
     {
         songs = await Http.GetFromJsonAsync<List<Song>>("api/songs");
+        filteredSongs = songs;
+
     }
+   
 
     // function to expand and show more details about each song
     async Task ExpandDetail(Song song)
@@ -65,6 +71,7 @@
         position: relative;
         overflow: hidden;
         max-height: 100px;
+        max-width: 264.11px;
         
     }
 
