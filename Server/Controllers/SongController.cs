@@ -38,5 +38,21 @@ namespace music_manager_starter.Server.Controllers
 
             return Ok();
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Song>>> SearchSongs(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return BadRequest("Song cannot be found.");
+            }
+            var matchingSongs = await _context.Songs.Where(song => song.Title.ToLower().Contains(s.ToLower()) || song.Artist.Contains(s)).ToListAsync();
+
+            if (!matchingSongs.Any())
+            {
+                return NotFound("No songs matched the search term.");
+            }
+            return Ok();
+        }
     }
 }

@@ -6,9 +6,17 @@
 @code {
     private List<Song> songs;
 
+    private bool isExpanded = false;
+
     protected override async Task OnInitializedAsync()
     {
         songs = await Http.GetFromJsonAsync<List<Song>>("api/songs");
+    }
+
+    // function to expand and show more details about each song
+    async Task ExpandDetail(Song song)
+    {
+        song.isExpanded = !song.isExpanded;
     }
 }
 
@@ -19,11 +27,17 @@
         {
             @foreach (var song in songs)
             {
-                <div
-                    class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
+                <div @onclick=" () => ExpandDetail(song)"
+                    class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer @(song.isExpanded ? "expanded" : "collapsed")">
                     <h3 class="text-xl font-semibold mb-2">@song.Title</h3>
                     <p class="text-md">Artist: <span class="font-light">@song.Artist</span></p>
+                    
+                    @if (song.isExpanded)
+                    {
+                        <p class="text-md">Genre: <span class="font-light">@song.Genre</span></p>
+                        <p class="text-md">Album: <span class="font-light">@song.Album</span></p>
 
+                    }
                 </div>
             }
         }
@@ -50,6 +64,16 @@
         border-radius: 10px;
         position: relative;
         overflow: hidden;
+        max-height: 100px;
+        
+    }
+
+    .glass.expanded{
+        max-height: 300px;
+    }
+
+    .glass.collapsed{
+        max-height: 100px;
     }
 
     .glass:before {
