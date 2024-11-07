@@ -17,7 +17,7 @@ namespace music_manager_starter.Server.Controllers
             _context = context;
         }
 
-  
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Playlist>>> GetPlaylists()
         {
@@ -51,7 +51,26 @@ namespace music_manager_starter.Server.Controllers
             _context.Playlists.Remove(playlist);
             await _context.SaveChangesAsync();
             return Ok();
+        }
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Playlist>> EditPlaylist(int id, [FromBody] Playlist updatedPlaylist)
+        {
+            var playlist = await _context.Playlists.FindAsync(id);
 
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+            if (!string.IsNullOrEmpty(updatedPlaylist.Name))
+            {
+                playlist.Name = updatedPlaylist.Name; // Update the name
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            // Return the updated playlist
+            return Ok(playlist);
         }
     }
 }

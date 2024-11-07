@@ -42,17 +42,17 @@ namespace music_manager_starter.Server.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Song>>> SearchSongs(string s)
         {
-            if (string.IsNullOrWhiteSpace(s))
+            if (String.IsNullOrWhiteSpace(s))
             {
                 return BadRequest("Song cannot be found.");
             }
-            var matchingSongs = await _context.Songs.Where(song => song.Title.ToLower().Contains(s.ToLower()) || song.Artist.Contains(s)).ToListAsync();
+            var matchingSongs = await _context.Songs.Where(song => song.Title.ToLower().Contains(s.ToLower()) || song.Artist.ToLower().Contains(s.ToLower())||song.Album.ToLower().Contains(s.ToLower())).ToListAsync();
 
             if (!matchingSongs.Any())
             {
                 return NotFound("No songs matched the search term.");
             }
-            return Ok();
+            return Ok(matchingSongs);
         }
     }
 }
