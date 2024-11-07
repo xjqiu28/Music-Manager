@@ -1,0 +1,53 @@
+@page "/EditPlaylist/{id:int}"
+@inject HttpClient Http
+@using music_manager_starter.Shared
+@inject NavigationManager Navigation
+
+
+@code {
+    [Parameter]
+    public int id {get; set;}
+    private Playlist updatedPlaylist;
+    private string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the playlist with the given ID
+        updatedPlaylist = await Http.GetFromJsonAsync<Playlist>($"api/playlists/{id}");
+    }
+    private async Task HandleValidSubmit()
+    {
+        var response = await Http.PatchAsJsonAsync($"api/playlists/{id}", updatedPlaylist);
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Playlist added successfully!";
+            Navigation.NavigateTo($"/playlists");
+            ;
+        }
+        else
+        {
+            message = "Error adding playlist. Please try again.";
+        }
+    }
+}
+
+<div class="p-6">
+    <h2 class="text-xl font-semibold text-white">Edit Playlist</h2>
+    <EditForm Model="updatedPlaylist" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-4">
+            <label class="block text-gray-200">New Name</label>
+            <InputText @bind-Value="updatedPlaylist.Name" class="mt-1 block w-full p-2 border rounded" />
+        </div>
+
+
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Edit Playlist</button>
+    </EditForm>
+
+    @if (message != null)
+    {
+        <p class="mt-4 text-green-500">@message</p>
+    }
+</div>
