@@ -12,6 +12,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Load the playlist with the given ID
         updatedPlaylist = await Http.GetFromJsonAsync<Playlist>($"api/playlists/{id}");
     }
     private async Task HandleValidSubmit()
