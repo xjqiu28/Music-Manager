@@ -2,7 +2,6 @@
 @using music_manager_starter.Shared
 
 @inject HttpClient Http
-@inject SearchService SearchService
 
 @code {
     private List<Song> songs;
@@ -12,36 +11,11 @@
 
     private bool isExpanded = false;
 
-
     protected override async Task OnInitializedAsync()
     {
         songs = await Http.GetFromJsonAsync<List<Song>>("api/songs");
-        filteredSongs = songs;
-
     }
-    async Task SearchSong(string word)
-    {
-        if (string.IsNullOrWhiteSpace(word)) //if search bar is empty, show all songs
-        {
-            songs = filteredSongs;
-        }
-        else
-        {
-            var response = await Http.GetAsync($"api/songs/search?s={word}");
-            if (response.IsSuccessStatusCode)
-            {
-                var searchResults = await response.Content.ReadFromJsonAsync<List<Song>>();
-                songs = searchResults;
-            }
-            else
-            {
-                songs = null; //shows no song found as songs is a null object
-            }
-
-            StateHasChanged();
-        }
-
-    }
+   
 
     // function to expand and show more details about each song
     async Task ExpandDetail(Song song)
@@ -64,17 +38,10 @@
         {
             @foreach (var song in songs)
             {
-                <div @onclick=" () => ExpandDetail(song)"
-                    class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer @(song.isExpanded ? "expanded" : "collapsed")">
+                <div class="glass p-6 border border-gray-300 rounded-lg text-white transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2">@song.Title</h3>
                     <p class="text-md">Artist: <span class="font-light">@song.Artist</span></p>
-                    
-                    @if (song.isExpanded)
-                    {
-                        <p class="text-md">Genre: <span class="font-light">@song.Genre</span></p>
-                        <p class="text-md">Album: <span class="font-light">@song.Album</span></p>
 
-                    }
                 </div>
             }
         }
@@ -87,31 +54,20 @@
 
 <style>
     .bg-pattern {
-        background: linear-gradient(rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.7)), url('dalle.webp');
+        background: linear-gradient( rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.7) ), url('dalle.webp');
         background-size: cover;
         background-position: center;
         font-family: 'Rajdhani', sans-serif;
     }
 
-
+ 
 
     .glass {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 10px;
-        position: relative;
-        overflow: hidden;
-        max-height: 100px;
-        max-width: 264.11px;
-        
-    }
-
-    .glass.expanded{
-        max-height: 300px;
-    }
-
-    .glass.collapsed{
-        max-height: 100px;
+        backdrop-filter: blur(10px); 
+        border-radius: 10px; 
+        position: relative; 
+        overflow: hidden; 
     }
     
 
